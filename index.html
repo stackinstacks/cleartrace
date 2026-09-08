@@ -1,568 +1,237 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>ClearTrace — Public-Record Due Diligence</title>
-  <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #fff;
-      --ink: #182230;
-      --muted: #7a8495;
-      --accent: #8b8ce8;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --error: #ef4444;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.6;
-    }
-
-    header {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(10px);
-      padding: 16px 24px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      font-size: 18px;
-    }
-
-    .logo::before {
-      content: "✓";
-      display: grid;
-      place-items: center;
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, #8b8ce8, #a8a9f1);
-      border-radius: 6px;
-      color: white;
-      font-weight: 700;
-    }
-
-    .badge {
-      font-size: 11px;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 3px 8px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    main {
-      max-width: 1180px;
-      margin: 44px auto;
-      padding: 0 20px;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .hero h1 {
-      font-size: 48px;
-      margin: 0 0 16px;
-      font-weight: 700;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .panel, .card {
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    .search {
-      padding: 18px;
-      margin: 26px 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      align-items: flex-end;
-    }
-
-    label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-      color: var(--muted);
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(139, 140, 232, 0.1);
-      outline: none;
-    }
-
-    button {
-      background: linear-gradient(135deg, #8b8ce8, #a8a9f1);
-      color: white;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(139, 140, 232, 0.3);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .notice {
-      padding: 14px 16px;
-      border-radius: 8px;
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: #92400e;
-      font-size: 13px;
-      margin-bottom: 20px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .kpis {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .kpi {
-      padding: 12px;
-      background: rgba(139, 140, 232, 0.05);
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .kpi strong {
-      display: block;
-      font-size: 24px;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .kpi span {
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .row:last-child {
-      border-bottom: none;
-    }
-
-    .row b {
-      min-width: 180px;
-    }
-
-    .source {
-      font-size: 12px;
-      color: #475467;
-      padding: 7px 0;
-    }
-
-    .small {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    footer {
-      margin: 35px 0;
-      color: #7a8495;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    footer a {
-      color: inherit;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    .provider-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 16px 0;
-    }
-
-    .provider {
-      padding: 14px;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 8px;
-      font-size: 13px;
-    }
-
-    .provider-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .api-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-    }
-
-    .architecture {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 12px;
-      margin: 16px 0;
-    }
-
-    .arch-step {
-      padding: 14px;
-      border-radius: 13px;
-      background: rgba(139, 140, 232, 0.08);
-      border: 1px solid rgba(139, 140, 232, 0.2);
-      font-size: 13px;
-    }
-
-    .arch-step strong {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 6px;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-
-    .source-link {
-      display: inline-block;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      margin: 4px 0;
-    }
-
-    .source-link:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 850px) {
-      .provider-grid, .architecture, .kpis {
-        grid-template-columns: 1fr;
-      }
-      .search, .grid {
-        grid-template-columns: 1fr;
-      }
-      .hero h1 {
-        font-size: 32px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClearTrace — Public-Record Due Diligence</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#182230;--muted:#667085;--line:#e7eaf0;--accent:#5b5ce2;--accent2:#7c5cff;--good:#087443;--warn:#a15c00;--bad:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#f7f8fc 0,#f4f6fa 100%);color:var(--ink)}
+header{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);color:var(--ink);padding:17px 5vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:850;font-size:21px;letter-spacing:-.5px}
+.logo:before{content:"✓";display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.badge{font-size:12px;border:1px solid #e0e3eb;padding:7px 10px;border-radius:99px;color:#667085;background:#fafbfc}
+main{max-width:1180px;margin:44px auto;padding:0 22px}
+.hero{text-align:center;margin-bottom:30px}.hero h1{font-size:42px;line-height:1.08;letter-spacing:-1.3px;margin:0 0 12px}.hero p{color:var(--muted);max-width:760px;margin:0 auto;line-height:1.6;font-size:16px}
+.panel,.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 30px rgba(16,24,40,.055)}
+.search{padding:18px;margin:26px 0;display:grid;grid-template-columns:1.3fr .8fr .8fr auto;gap:12px;align-items:end}
+label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:800;color:#667085;display:block;margin-bottom:7px}
+input,select,button{width:100%;height:46px;border:1px solid #dfe3eb;border-radius:11px;padding:0 13px;font:inherit;outline:none;transition:.18s}
+input:focus,select:focus{border-color:#8b8ce8;box-shadow:0 0 0 4px #5b5ce214}
+button{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0;font-weight:750;cursor:pointer;box-shadow:0 7px 16px #5b5ce226}
+button:hover{transform:translateY(-1px);box-shadow:0 9px 20px #5b5ce233}
+.notice{padding:14px 16px;border-radius:13px;background:#fffaf0;border:1px solid #f1dfad;color:#805300;font-size:12px;line-height:1.5;margin-bottom:20px}
+.hidden{display:none}.grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}.card{padding:22px;margin-bottom:20px}.card h2{font-size:17px;letter-spacing:-.2px;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{padding:15px;background:#fafbfe;border:1px solid var(--line);border-radius:13px}.kpi strong{display:block;font-size:22px;line-height:1.1;color:var(--accent);margin-bottom:3px}.kpi span{font-size:10px;text-transform:uppercase;font-weight:850;color:var(--muted)}
+.row{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}.pill{font-size:10px;font-weight:850;border-radius:99px;padding:5px 9px;display:inline-block;background:#f3f4f6;color:#374151;text-transform:uppercase}.pill.green{background:#dcfce7;color:var(--good)}.pill.yellow{background:#fef3c7;color:var(--warn)}.pill.red{background:#fee2e2;color:var(--bad)}
+.source{font-size:12px;color:#475467;padding:7px 0}.source a{color:var(--accent);text-decoration:none}
+.small{font-size:12px;color:var(--muted);line-height:1.65}
+footer{margin:35px 0;color:#7a8495;font-size:11px;line-height:1.6;text-align:center}
+.provider-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.provider{padding:14px;border:1px solid var(--line);border-radius:13px;background:#fafbfe}
+.provider-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.provider b{font-size:13px}.provider p{margin:7px 0 0}
+.api-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#12b76a;box-shadow:0 0 0 4px #12b76a18}
+.architecture{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.arch-step{padding:14px;border-radius:13px;background:#f8f9fc;border:1px solid var(--line)}
+.arch-step strong{display:block;font-size:12px;margin-bottom:5px}.arch-step span{font-size:11px;color:var(--muted);line-height:1.5}
+.social-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}.social-toolbar button{width:auto;padding:0 15px}.toggle{font-size:11px;color:var(--muted)}
+@media(max-width:850px){.provider-grid,.architecture{grid-template-columns:1fr}}
+@media(max-width:850px){.search,.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}header{padding:15px 20px}.hero h1{font-size:34px}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="logo">ClearTrace
-      <span class="badge">Prototype</span>
-    </div>
-  </header>
+<header><div class="logo">ClearTrace</div><div class="badge">Public-record research prototype</div></header>
+<main>
+<section class="hero">
+<h1>Investigation made easy</h1>
+<p>Compile a source-linked research brief from lawful, publicly available information. The prototype emphasizes corroboration, uncertainty, and source quality rather than making conclusions about individuals.</p>
+</section>
 
-  <main>
-    <section class="hero">
-      <h1>Investigation made easy</h1>
-      <p>Compile a source-linked research brief from lawful, publicly available information. ClearTrace emphasizes corroboration, uncertainty, and source quality.</p>
-    </section>
+<div class="notice"><b>Use limitation:</b> This prototype is for general research and due diligence. Do not use its output as the sole basis for employment, housing, credit, insurance, education, or discrimination of any kind. Consult legal and compliance teams.</div>
 
-    <div class="notice">
-      <b>Use limitation:</b> This tool is for educational and due-diligence research only. Do not use for discriminatory purposes, stalking, harassment, or to evade legal process. Verify all findings through independent sources.
-    </div>
+<section class="panel search">
+<div><label>Full name</label><input id="name" placeholder="e.g., Jordan Smith"></div>
+<div><label>State / region</label><input id="region" placeholder="e.g., Michigan"></div>
+<div><label>Known city (optional)</label><input id="city" placeholder="e.g., Detroit"></div>
+<div><label>Search depth</label><select id="depth"><option value="standard">Standard</option><option value="intensive">Intensive public-records search</option></select></div>
+<div><label>Research scope</label><select id="scope"><option value="all">All sources</option><option value="public_records">Public records only</option><option value="social">Social sources only</option></select></div>
+<div style="display:flex;align-items:end"><button onclick="run()">Generate report</button></div>
+</section>
 
-    <section class="panel search">
-      <div>
-        <label>Full name</label>
-        <input id="fullname" type="text" placeholder="John Doe">
-      </div>
-      <div>
-        <label>State / region</label>
-        <input id="region" type="text" placeholder="California">
-      </div>
-      <div>
-        <label>Known city (optional)</label>
-        <input id="city" type="text" placeholder="San Francisco">
-      </div>
-      <div style="display: flex; align-items: flex-end; gap: 8px;">
-        <button onclick="run()">Research</button>
-      </div>
-    </section>
+<section id="report" class="hidden">
+<div class="grid">
+<div>
+<div class="card">
+<h2>Research overview</h2>
+<div class="kpis">
+<div class="kpi"><strong id="rname">—</strong><span>Subject</span></div>
+<div class="kpi"><strong id="categoryCount">—</strong><span>Record categories checked</span></div>
+<div class="kpi"><strong>0</strong><span>Confirmed findings in demo</span></div>
+<div class="kpi"><strong>Medium</strong><span>Identity confidence</span></div>
+</div>
+<p class="small" style="margin-top:15px">This demo intentionally returns neutral placeholder findings. A production version should populate this section only from verified records and preserve the complete audit trail.</p>
+</div>
 
-    <section id="report" class="hidden">
-      <div class="grid">
-        <div>
-          <div class="card">
-            <h2>Research overview</h2>
-            <p class="small" style="margin-top: 0;">Subject: <b id="rname"></b></p>
-            <div class="kpis">
-              <div class="kpi">
-                <strong id="findings-count">0</strong>
-                <span>Findings</span>
-              </div>
-              <div class="kpi">
-                <strong id="sources-count">0</strong>
-                <span>Sources</span>
-              </div>
-              <div class="kpi">
-                <strong id="confidence">—</strong>
-                <span>Confidence</span>
-              </div>
-              <div class="kpi">
-                <strong id="risk-level">—</strong>
-                <span>Risk</span>
-              </div>
-            </div>
-            <p class="small">Last updated: <span id="timestamp"></span></p>
-          </div>
+<div class="card">
+<h2>Public-record search</h2>
+<p class="small">Intensive mode checks the authorized records adapter across criminal/court, civil, bankruptcy, licensing, business, regulatory, contracting, campaign-finance, property-tax, and judgments.</p>
+<div id="recordSummary" class="rows"></div>
+</div>
 
-          <div class="card">
-            <h2>Potential criminal / court records</h2>
-            <div class="row">
-              <div><b>No convictions found</b></div>
-              <div class="small">
-                Production matching should include state court records, federal PACER, and county-level case lookups.
-              </div>
-            </div>
-          </div>
+<div class="card">
+<h2>Potential criminal / court records</h2>
+<div class="row"><div><b>No confirmed record in demo dataset</b><div class="small">No live court database is connected to this prototype.</div></div><span class="pill">UNVERIFIED</span></div>
+<p class="small">Production matching should require multiple identifiers before attributing a record to a person, and should distinguish arrest, charge, disposition, conviction, expungement/sealing and other legal statuses.</p>
+</div>
 
-          <div class="card">
-            <h2>Social research sources</h2>
-            <p class="small">The production architecture queries:</p>
-            <div class="provider-grid">
-              <div class="provider">
-                <div class="provider-top">
-                  <strong>X</strong>
-                  <div class="api-dot"></div>
-                </div>
-                <span class="small">Public profiles, username matching</span>
-              </div>
-              <div class="provider">
-                <div class="provider-top">
-                  <strong>LinkedIn</strong>
-                  <div class="api-dot"></div>
-                </div>
-                <span class="small">Professional history, location signals</span>
-              </div>
-              <div class="provider">
-                <div class="provider-top">
-                  <strong>Meta / Web</strong>
-                  <div class="api-dot"></div>
-                </div>
-                <span class="small">Public pages, name / location cross-check</span>
-              </div>
-            </div>
+<div class="card">
+<h2>Social research sources</h2>
+<p class="small">The production architecture is designed around authorized platform APIs and searchable public pages. API credentials belong on the server—not in this browser prototype.</p>
 
-            <p class="small"><b>Architecture:</b></p>
-            <div class="architecture">
-              <div class="arch-step">
-                <strong>1 · Identity</strong>
-                Compare name, location, and baseline demographics.
-              </div>
-              <div class="arch-step">
-                <strong>2 · Retrieve</strong>
-                Query court, government, and social APIs.
-              </div>
-              <div class="arch-step">
-                <strong>3 · Corroborate</strong>
-                Check for multiple signals across sources.
-              </div>
-              <div class="arch-step">
-                <strong>4 · Classify</strong>
-                Rate confidence: confirmed, likely, possible, or contradictory.
-              </div>
-            </div>
-          </div>
+<div class="provider-grid">
+  <div class="provider"><div class="provider-top"><b>X</b><span class="api-dot"></span></div><p class="small">Authorized API adapter for public profiles/posts where permitted.</p></div>
+  <div class="provider"><div class="provider-top"><b>LinkedIn</b><span class="api-dot"></span></div><p class="small">Official API adapter subject to LinkedIn approval, permissions, privacy settings and terms of service.</p></div>
+  <div class="provider"><div class="provider-top"><b>Instagram / Meta</b><span class="api-dot"></span></div><p class="small">Official Meta adapter for eligible professional/business data and permissions.</p></div>
+</div>
 
-          <div class="card">
-            <h2>Possible social media matches</h2>
-            <p class="small">Public profiles that appear to match the subject:</p>
-            <div class="row"><div><b>LinkedIn</b></div> <div class="small">No candidates found</div></div>
-            <div class="row"><div><b>Facebook</b></div> <div class="small">No candidates found</div></div>
-            <div class="row"><div><b>Instagram</b></div> <div class="small">No candidates found</div></div>
-            <p class="small"><b>Production rule:</b> Match only if 3+ signals align. Discard low-confidence candidates and show all sources.</p>
-          </div>
+<div class="architecture">
+  <div class="arch-step"><strong>1 · Query planner</strong><span>Creates platform-specific searches from name, region and other non-sensitive identifiers.</span></div>
+  <div class="arch-step"><strong>2 · Source adapters</strong><span>Calls approved APIs or retrieves permitted public pages through a server-side fetch layer.</span></div>
+  <div class="arch-step"><strong>3 · Candidate matcher</strong><span>Scores candidates using explainable signals such as name, username, location and public professional information.</span></div>
+  <div class="arch-step"><strong>4 · Human review</strong><span>Separates possible matches from verified identities and preserves source URLs and retrieval timestamps.</span></div>
+</div>
 
-          <div class="card">
-            <h2>Public-information cross-check</h2>
-            <div class="row"><div><b>Identity match</b></div> <div class="small">State ID records, voter registration</div></div>
-            <div class="row"><div><b>Professional history</b></div> <div class="small">Professional license databases, business filings</div></div>
-            <div class="row"><div><b>News / web presence</b></div> <div class="small">Indexed news articles, public mentions</div></div>
-          </div>
-        </div>
+<div class="social-toolbar">
+  <button class="secondary" onclick="showArchitecture()">View adapter status</button>
+  <span id="adapterStatus" class="toggle">Demo mode · no external APIs connected</span>
+</div>
+</div>
 
-        <aside>
-          <div class="card">
-            <h2>Methodology</h2>
-            <div class="small">
-              <b>1. Resolve identity</b><br>
-              Compare name, jurisdiction and other non-sensitive identifiers.
-              <br><br>
+<div class="card">
+<h2>Possible social media matches</h2>
+<p class="small">Public profiles that appear potentially relevant should be treated as leads only until independently verified.</p>
+<div class="row"><div><b>LinkedIn</b><div class="small">Candidate: <span class="source">source URL would appear here</span> · Signals: name, region, professional information.</div></div><span class="pill yellow">POSSIBLE</span></div>
+<div class="row"><div><b>Facebook</b><div class="small">Candidate: <span class="source">public page URL would appear here</span> · Signals: name/location.</div></div><span class="pill yellow">POSSIBLE</span></div>
+<div class="row"><div><b>Instagram / X</b><div class="small">No reliable candidate established in demo dataset.</div></div><span class="pill">UNRESOLVED</span></div>
+<p class="small"><b>Production rule:</b> never present a social account as belonging to the subject solely because the name or username matches. Preserve the public source and matching factors for every candidate.</p>
+</div>
 
-              <b>2. Retrieve sources</b><br>
-              Prefer courts, government registries, official organizations and reputable research.
-              <br><br>
+<div class="card">
+<h2>Public-information cross-check</h2>
+<div class="row"><div><b>Identity consistency</b><div class="small">Name + region supplied by user.</div></div><span class="pill yellow">PARTIAL</span></div>
+<div class="row"><div><b>Professional / organizational presence</b><div class="small">Would be populated from authoritative public sources.</div></div><span class="pill">NOT CHECKED</span></div>
+<div class="row"><div><b>News / public reporting</b><div class="small">Would require source review and duplicate-story clustering.</div></div><span class="pill">NOT CHECKED</span></div>
+</div>
+</div>
 
-              <b>3. Corroborate</b><br>
-              Separate matching records from similarly named people.
-              <br><br>
+<aside>
+<div class="card">
+<h2>Methodology</h2>
+<div class="small">
+<b>1. Resolve identity</b><br>Compare name, jurisdiction and other non-sensitive identifiers.<br><br>
+<b>2. Retrieve sources</b><br>Prefer courts, government registries, official organizations and reputable reporting.<br><br>
+<b>3. Corroborate</b><br>Separate matching records from similarly named people.<br><br>
+<b>4. Classify</b><br>Confirmed, likely match, possible match, contradictory, or unresolved.<br><br>
+<b>5. Report</b><br>Show source, date, confidence and limitations for every material finding.
+</div>
+</div>
+<div class="card">
+<h2>Source ledger</h2>
+<div class="source">Court records — <b>not connected</b></div><br>
+<div class="source">Government records — <b>not connected</b></div><br>
+<div class="source">News/web — <b>not connected</b></div>
+</div>
+</aside>
+</div>
 
-              <b>4. Classify</b><br>
-              Confirmed, likely match, possible match, contradictory, or unresolved.
-              <br><br>
+<div class="card">
+<h2>Important safeguards for a production deployment</h2>
+<div class="small">
+• Minimize personal data: avoid displaying home addresses, exact birth dates, family/associate lists, phone numbers, emails, or other sensitive details unless strictly necessary and lawful.<br>
+• Never infer race, religion, health, political affiliation, sexual orientation, or similar sensitive traits.<br>
+• Do not equate an arrest, allegation, lawsuit, or name match with guilt.<br>
+• Preserve source provenance and retrieval timestamps; allow a reviewer to inspect the underlying record.<br>
+• Provide correction/dispute and record-status workflows where appropriate.<br>
+• Apply rate limits, access controls, audit logs, retention limits, and encryption.<br>
+• For employment or other regulated background-screening use, use a compliant screening provider and required legal notices/consent processes instead of treating this tool as a consumer-reporting agency.
+</div>
+</div>
+</section>
 
-              <b>5. Report</b><br>
-              Show source, date, confidence and limitations for every material finding.
-            </div>
-          </div>
+<footer>ClearTrace prototype • Demo data only • Replace the mock research layer with authorized APIs/data sources and a server-side review pipeline before real-world use.</footer>
+</main>
+<script>
+async function run(){
+ const n=document.getElementById('name').value.trim()||'Unnamed subject';
+ const city=document.getElementById('city').value.trim();
+ const region=document.getElementById('region').value.trim();
+ const depth=document.getElementById('depth').value;
+ const scope=document.getElementById('scope').value;
+ document.getElementById('rname').textContent=n.length>18?n.slice(0,18)+'…':n;
+ document.getElementById('report').classList.remove('hidden');
+ document.getElementById('adapterStatus').textContent='Querying authorized server-side sources…';
+ try {
+   const response = await fetch((window.CLEARTRACE_API_BASE || '') + '/api/research', {
+     method:'POST', headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({name:n, city, region, depth, scope, sources:['x','linkedin','instagram','court_records','public_records']})
+   });
+   if(!response.ok) throw new Error('API unavailable');
+   const data = await response.json();
+   window.clearTraceResearch = data;
+   const social = (data.candidates||[]).filter(x => ['x','linkedin','instagram'].includes(x.platform));
+   const records = (data.candidates||[]).filter(x => !x.platform);
+   const categories = new Set(records.map(x => x.category).filter(Boolean));
+   document.getElementById('categoryCount').textContent = categories.size || '—';
+   document.getElementById('recordSummary').innerHTML = records.slice(0,30).map(x => `<div class="row"><div><b>${escapeHtml(x.title||'Public record')}</b><div class="small">${escapeHtml(x.category||'')}</div></div><span class="pill">${escapeHtml(x.status||'UNVERIFIED')}</span></div>`).join('');
+   document.getElementById('adapterStatus').textContent = `Pipeline complete · ${records.length} public-record candidates · ${social.length} social candidates · ${data.errors?.length||0} provider errors`;
+   console.log('ClearTrace server research report', data);
+ } catch(e) {
+   document.getElementById('adapterStatus').textContent='Server pipeline not connected · showing prototype data';
+ }
+ document.getElementById('report').scrollIntoView({behavior:'smooth'});
+}
 
-          <div class="card">
-            <h2>Open-source information paths</h2>
-            <div class="small">
-              <b>Court Records</b><br>
-              <a class="source-link" href="https://www.courtlistener.com/api/" target="_blank">CourtListener API</a><br>
-              <a class="source-link" href="https://www.pacer.gov/" target="_blank">PACER (Federal Courts)</a><br>
-              <br>
+function escapeHtml(value){ return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-              <b>Government Records</b><br>
-              <a class="source-link" href="https://www.sec.gov/edgar/" target="_blank">SEC EDGAR (Filings)</a><br>
-              <a class="source-link" href="https://www.sos.ca.gov/" target="_blank">Secretary of State Databases</a><br>
-              <br>
+function showArchitecture(){
+ document.getElementById('adapterStatus').textContent =
+   'Architecture ready · API credentials should be stored server-side';
+}
 
-              <b>Professional Licensing</b><br>
-              <a class="source-link" href="https://www.fcc.gov/" target="_blank">FCC License Database</a><br>
-              <a class="source-link" href="https://www.fsmb.org/" target="_blank">FSMB Physician Finder</a><br>
-              <br>
+/*
+  Production integration contract (server-side):
 
-              <b>News & Web</b><br>
-              <a class="source-link" href="https://newsapi.org/" target="_blank">NewsAPI</a><br>
-              <a class="source-link" href="https://commoncrawl.org/" target="_blank">Common Crawl Index</a><br>
-              <br>
+  POST /api/research/social
+  {
+    "name": "...",
+    "region": "...",
+    "city": "...",
+    "sources": ["x","linkedin","instagram","facebook","public_web"]
+  }
 
-              <b>Public Registries</b><br>
-              <a class="source-link" href="https://www.geonames.org/" target="_blank">GeoNames Database</a><br>
-              <a class="source-link" href="https://archive.org/" target="_blank">Archive.org Wayback Machine</a>
-            </div>
-          </div>
+  Expected normalized response:
+  {
+    "candidates": [{
+      "platform": "x",
+      "profile_url": "https://...",
+      "display_name": "...",
+      "username": "...",
+      "signals": [
+        {"type":"name","strength":0.98},
+        {"type":"location","strength":0.72}
+      ],
+      "confidence": 0.84,
+      "status": "possible",
+      "retrieved_at": "2026-09-08T..."
+    }]
+  }
 
-          <div class="card">
-            <h2>Important safeguards</h2>
-            <div class="small">
-              • <b>Minimize personal data:</b> Avoid displaying home addresses, exact birth dates, family/associate lists, phone numbers, emails, or other sensitive details unless strictly necessary and lawful.<br>
-              • <b>No sensitive inference:</b> Never infer race, religion, health, political affiliation, sexual orientation, or similar traits.<br>
-              • <b>Avoid presumption of guilt:</b> Do not equate an arrest, allegation, lawsuit, or name match with guilt.<br>
-              • <b>Preserve provenance:</b> Allow a reviewer to inspect the underlying record and retrieval timestamp.<br>
-              • <b>Provide redress:</b> Include correction/dispute and record-status workflows where appropriate.<br>
-              • <b>Apply controls:</b> Rate limits, access controls, audit logs, retention limits, and encryption.<br>
-              • <b>Regulatory compliance:</b> For employment or regulated background screening, use a compliant provider with required legal notices.
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <footer>
-      ClearTrace prototype • <a href="https://github.com/stackinstacks/cleartrace" target="_blank">View on GitHub</a> • Educational use only
-    </footer>
-  </main>
-
-  <script>
-    async function run() {
-      const name = document.getElementById('fullname').value;
-      const city = document.getElementById('city').value;
-      const region = document.getElementById('region').value;
-
-      if (!name || !region) {
-        alert('Please enter a name and region.');
-        return;
-      }
-
-      document.getElementById('rname').textContent = name;
-      document.getElementById('report').classList.remove('hidden');
-      document.getElementById('timestamp').textContent = new Date().toLocaleString();
-      document.getElementById('findings-count').textContent = '3';
-      document.getElementById('sources-count').textContent = '5';
-      document.getElementById('confidence').textContent = 'Medium';
-      document.getElementById('risk-level').textContent = 'Low';
-
-      document.getElementById('report').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // Allow Enter key to trigger search
-    document.getElementById('fullname').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') run();
-    });
-    document.getElementById('region').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') run();
-    });
-  </script>
+  Important: API keys/OAuth tokens must never be embedded in this HTML.
+  The backend should enforce each platform's terms, rate limits, permissions,
+  retention requirements and robots/public-page rules. It should also record
+  provenance so every candidate can be audited.
+*/
+</script>
 </body>
 </html>
